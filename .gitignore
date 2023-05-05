@@ -39,5 +39,4 @@ luac.out
 *.x86_64
 *.hex
 
-out.png
-out2.txt
+AUTO_*.*
