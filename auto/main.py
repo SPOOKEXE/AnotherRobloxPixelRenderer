@@ -6,7 +6,8 @@ from pydantic import FilePath
 
 FILE_DIRECTORY = os_path.dirname(os_path.abspath(__file__))
 
-THUMB_SIZE = (300, 225)
+#THUMB_SIZE = (300, 225)
+THUMB_SIZE = (256, 192)
 
 def ImageFileToPixelData( filepath : str ) -> tuple[tuple, list]:
 	shape, data = None, None
@@ -54,20 +55,24 @@ def ADV_GreedyRobloxTableFormat( pixels ) -> str:
 			index += 1
 	return str(new_pixels).replace(" ", "")
 
-#FILEPATH = "C:\\Users\\Declan\\Documents\\BryanModelerOceanGuy.png"
+# FILEPATH = "C:\\Users\\NAME\\Documents\\a.webp"
 
 print("Enter the filepath of the image you want to convert to pixels. ")
 FILEPATH = input()
-print(FilePath)
+print(FILEPATH)
 
 image_size, pixels = ImageFileToPixelData(FILEPATH)
+if image_size == None:
+	print("FAILED TO FIND IMAGE.")
+	exit()
+
 print(image_size, len(pixels))
 
 pixels = ADV_GreedyRobloxTableFormat(pixels)
 
 with open( os_path.join(FILE_DIRECTORY, "AUTO_PixelDataLoader.lua"), "w" ) as file:
 	file.write(f"""local Data = '{pixels.replace("'", '"')}'
-_G.V111 = '['..Data..']'""")
+_G.V111 = Data""")
 
 with open( os_path.join(FILE_DIRECTORY, "AUTO_PartPixels.lua"), "w" ) as file:
 	file.write("""local HttpService = game:GetService("HttpService")

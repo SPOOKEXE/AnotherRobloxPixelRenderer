@@ -29,3 +29,5 @@
 
 7. Run  the BillboardPixels.lua / PartPixels.lua in script builder.
 	![](docs/SampleRunServer.PNG)
+
+https://www.roblox.com/games/1075564225/UPD7-Script-Showcase
