@@ -4,30 +4,18 @@
 
 1. Get the path to the image
 
-2. Edit the "FILEPATH = ..." line with the image filepath
-![](docs/SAMPLE_FILEPATH.PNG)
+2. Run the python code and enter the image filepath.
 
-3. Run the PixelLoader python script
-
-4. Get result out2.txt and upload to pastebin with the following format:
-	![](docs/SAMPLEEdit.PNG)
-	```lua
-	local Data = [[DATA_HERE]]
-	_G.V111 = "["..Data.."]"
-	```
+3. Get result AUTO_PixelDataLoader.lua and upload to pastebin with the following format:
 	![](docs/SAMPLERAW.PNG)
 
-5. Run the pastebin code with "h/PASTEBIN_RAW_URL"
+4. Run the pastebin code with "h/PASTEBIN_RAW_URL"
 	![](docs/SampleLoadPastebin.PNG)
 
-6. in the BillboardPixels.lua / PartPixels.lua, edit the following lines.
-	```lua
-	local ImageWidth = 240
-	local ImageHeight = 135
-	```
-	![](docs/Sample_EditImageSizes.PNG)
-
-7. Run  the BillboardPixels.lua / PartPixels.lua in script builder.
+5. Run the BillboardPixels.lua / PartPixels.lua in script builder.
 	![](docs/SampleRunServer.PNG)
+
+## Test Here
+You can test this system here;
 
 https://www.roblox.com/games/1075564225/UPD7-Script-Showcase
