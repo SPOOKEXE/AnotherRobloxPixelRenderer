@@ -81,7 +81,7 @@ end
 function Functions.Delete(self)
 	if self.ReferenceFrame then
 		self.ReferenceFrame:Destroy()
-		self.ReferReferenceFrameencePart = nil
+		self.ReferenceFrame = nil
 	end
 	if self.Billboard then
 		self.Billboard.Parent = nil
@@ -123,15 +123,17 @@ end
 
 -- // Runner // --
 local Data = _G.V111
-local ImageWidth = 240
-local ImageHeight = 135
+local ImageWidth = 143
+local ImageHeight = 180
 
 local renderer = PixelRender.New(Data, ImageWidth, ImageHeight)
 
 renderer.Billboard.Adornee = game.Players.SPOOK_EXE.Character.Head
 renderer.Billboard.SizeOffset = Vector2.new(0, 1)
 
+print("Start Loading Pixels")
 Functions.LoadAll(renderer)
+print("Loaded Pixels")
 
 task.delay(10, function()
 	Functions.Delete(renderer)

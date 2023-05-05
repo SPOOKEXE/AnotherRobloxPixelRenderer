@@ -1,57 +1,14 @@
 local HttpService = game:GetService("HttpService")
 
+local SCALE = 1
+
 local function ReformatPythonArray( PythonArrayString )
 	return string.gsub(PythonArrayString, "'", '"')
 end
 
--- // Render Chunks // --
-local PixelRender = {}
-PixelRender.__index = PixelRender
+local Functions = { }
 
-function PixelRender.New( DataString, ImageWidth )
-
-	local Model = Instance.new('Model')
-	Model.Name = time()
-	Model.Parent = workspace.Terrain
-
-	local ReferencePart = Instance.new('Part')
-	ReferencePart.Name = 'Pixel'
-	ReferencePart.Color = Color3.new(1,1,1)
-	ReferencePart.Anchored = true
-	ReferencePart.CanCollide = false
-	ReferencePart.CanTouch = false
-	ReferencePart.CanQuery = false
-	ReferencePart.Size = Vector3.new(0.1, 0.1, 0.1)
-	ReferencePart.CastShadow = true
-	ReferencePart.Massless = true
-
-	local self = {
-		DataString = DataString,
-		ImageWidth = ImageWidth,
-		Model = Model,
-		CurrentIndex = false,
-		PixelNumber = 1,
-		DataLength = false,
-		Scale = 0.1,
-		ReferencePart = ReferencePart,
-	}
-
-	setmetatable(self, PixelRender)
-
-	return self
-end
-
-function PixelRender:MoveTo( Origin )
-	self.Model:MoveTo(Origin)
-end
-
-function PixelRender:ScaleTo( ScaleFactor )
-	self.Scale = ScaleFactor
-	self.Model:ScaleTo( ScaleFactor )
-	self.ReferencePart.Size = Vector3.new(ScaleFactor, ScaleFactor, ScaleFactor)
-end
-
-function PixelRender:LoadNext()
+function Functions.LoadNext(self)
 	if not self.Model then
 		return
 	end
@@ -60,7 +17,7 @@ function PixelRender:LoadNext()
 		self.CurrentIndex = 1
 	end
 
-	local Data = HttpService:JSONDecode( ReformatPythonArray(self.DataString) )
+	local Data = self.DataRaw
 	if not self.DataLength then
 		self.DataLength = #Data
 	end
@@ -89,15 +46,19 @@ function PixelRender:LoadNext()
 	for index, pixelColor in ipairs(Pixels) do
 		local actualIndex = (self.PixelNumber + index)
 		local Row = math.floor(actualIndex / self.ImageWidth)
-		local Column = actualIndex % self.ImageWidth
+		local Column = (actualIndex % self.ImageWidth)
 
 		local R,G,B = unpack(pixelColor)
 
 		local NewPixel = self.ReferencePart:Clone()
 		NewPixel.Name = actualIndex
 		NewPixel.Color = Color3.fromRGB(R,G,B)
-		NewPixel.Position = Vector3.new(Column * self.Scale, -Row * self.Scale, 0)
+		NewPixel.Position = Vector3.new(Column * SCALE, -Row * SCALE, 0)
 		NewPixel.Parent = self.Model
+
+		if index % 2500 == 0 then
+			task.wait()
+		end
 	end
 
 	self.PixelNumber = (pixelIndex + #Pixels)
@@ -105,15 +66,18 @@ function PixelRender:LoadNext()
 	return true
 end
 
-function PixelRender:LoadAll()
-	while self:LoadNext() do
-		if self.CurrentIndex % 1000 == 0 then
+function Functions.LoadAll(self)
+	local Counter = 0
+	while Functions.LoadNext(self) do
+		if Counter % 500 == 0 then
+			Counter = 0
 			task.wait()
 		end
+		Counter += 1
 	end
 end
 
-function PixelRender:Delete()
+function Functions.Delete(self)
 	if self.ReferencePart then
 		self.ReferencePart:Destroy()
 		self.ReferencePart = nil
@@ -125,17 +89,53 @@ function PixelRender:Delete()
 	end
 end
 
+-- // Render Chunks // --
+local PixelRender = {}
+
+function PixelRender.New( DataString, ImageWidth, ImageHeight )
+	local Model = Instance.new('Model')
+	Model.Name = time()
+	Model.Parent = workspace.Terrain
+
+	local ReferencePart = Instance.new('Part')
+	ReferencePart.Name = 'Pixel'
+	ReferencePart.Anchored = true
+	ReferencePart.CanCollide = false
+	ReferencePart.CanTouch = false
+	ReferencePart.CanQuery = false
+	ReferencePart.CastShadow = false
+	ReferencePart.Massless = true
+	ReferencePart.Color = Color3.new(1,1,1)
+	ReferencePart.Size = Vector3.new(SCALE, SCALE, SCALE)
+
+	local self = {
+		DataString = DataString,
+		DataRaw = HttpService:JSONDecode( ReformatPythonArray(DataString) ),
+		ImageWidth = ImageWidth,
+		ImageHeight = ImageHeight,
+		Model = Model,
+		ReferencePart = ReferencePart,
+		CurrentIndex = false,
+		PixelNumber = 1,
+		DataLength = false,
+	}
+
+	return self
+end
+
 -- // Runner // --
-local Data = HttpService:GetAsync('https://cdn.discordapp.com/attachments/834699300935041054/1104036883945758772/out2.txt', true)
+local Data = _G.V111
+local ImageWidth = 156
+local ImageHeight = 225
 
-if _G.Delete then
-	_G.Delete()
-	_G.Delete = nil
-end
+local renderer = PixelRender.New(Data, ImageWidth, ImageHeight)
 
-local renderer = PixelRender.New(Data, 122)
-renderer:LoadAll()
+print("Start Loading Pixels")
+Functions.LoadAll(renderer)
+print("Loaded Pixels")
 
-_G.Delete = function()
-	renderer:Delete()
-end
+renderer.Model:PivotTo( game.Players.SPOOK_EXE.Character:GetPivot() * CFrame.new(0, ImageHeight/2, 0) )
+
+task.delay(10, function()
+	Functions.Delete(renderer)
+end)

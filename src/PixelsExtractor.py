@@ -1,9 +1,11 @@
 from PIL import Image
 
+THUMB_SIZE = (300, 225) #(240, 180)
+
 def GetImagePixels( filepath : str ) -> tuple[tuple, list]:
 	img = Image.open(filepath)
 	img.convert('RGB')
-	img.thumbnail( (240, 180) )
+	img.thumbnail( THUMB_SIZE )
 	shape, data = (img.width, img.height), list(img.getdata())
 	img.save('out.png')
 	img.close()
@@ -49,7 +51,7 @@ def ADV_GreedyRobloxTableFormat( shape, pixels ) -> str:
 			index += 1
 	return str(new_pixels).replace(" ", "")
 
-FILEPATH = "C:\\Users\\Declan\\Documents\\blah.jpg"
+FILEPATH = "C:\\Users\\Declan\\Documents\\BryanModelerOceanGuy.png"
 shape, pixels = GetImagePixels(FILEPATH)
 
 print(shape)
