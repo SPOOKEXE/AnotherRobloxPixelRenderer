@@ -22,6 +22,8 @@ class ThreadedServerResponder(BaseHTTPRequestHandler):
 		self.wfile.write( _str_to_byte(message) )
 
 	def do_GET(self):
+		print("got request")
+
 		# send response status code
 		self.send_response(200)
 		# send header information

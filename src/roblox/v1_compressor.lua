@@ -61,6 +61,10 @@ function Functions.LoadNext(self)
 	end
 
 	local pixelIndex = self.PixelNumber
+
+	local PixelGroup = Instance.new('Model')
+	PixelGroup.Name = 'PixelGroup_'..pixelIndex
+
 	for index, pixelColor in ipairs(Pixels) do
 		local actualIndex = (self.PixelNumber + index)
 		local Row = math.floor(actualIndex / self.ImageWidth)
@@ -72,12 +76,14 @@ function Functions.LoadNext(self)
 		NewPixel.Name = actualIndex
 		NewPixel.Color = Color3.fromRGB(R,G,B)
 		NewPixel.Position = Vector3.new(Column * SCALE, -Row * SCALE, 0)
-		NewPixel.Parent = self.Model
+		NewPixel.Parent = PixelGroup
 
 		if index % 2500 == 0 then
 			task.wait()
 		end
 	end
+
+	PixelGroup.Parent = self.Model
 
 	self.PixelNumber = (pixelIndex + #Pixels)
 
@@ -101,7 +107,7 @@ function Functions.Delete(self)
 		self.ReferencePart = nil
 	end
 	if self.Model then
-		self.Model.Parent = nil
+		self.Model:ClearAllChildren()
 		self.Model:Destroy()
 		self.Model = nil
 	end
@@ -146,12 +152,20 @@ local ImageHeight = Shape[2]
 
 local renderer = PixelRender.New(RawPixels, ImageWidth, ImageHeight)
 
+local GoalCFrame = game.Players.SPOOK_EXE.Character:GetPivot() * CFrame.new((-ImageWidth/2) * SCALE, (ImageHeight/2) * SCALE, 0)
+
+local Att = Instance.new('Attachment')
+Att.Visible = true
+Att.WorldCFrame = GoalCFrame
+Att.Parent = workspace.Terrain
+
 print("Start Loading Pixels - ", #RawPixels)
 Functions.LoadAll(renderer)
 print("Loaded Pixels")
 
-renderer.Model:PivotTo( game.Players.SPOOK_EXE.Character:GetPivot() * CFrame.new(0, ImageHeight/2, 0) )
+renderer.Model:PivotTo( GoalCFrame )
 
 task.delay(10, function()
+	Att:Destroy()
 	Functions.Delete(renderer)
 end)

@@ -41,3 +41,4 @@ luac.out
 
 AUTO_*.*
 loader.lua
+__pycache__
