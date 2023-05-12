@@ -1,5 +1,6 @@
+
 from localhost import SetupLocalHost, SET_HOSTED_RAW_DATA
-from ngrok import LocalHostTunnel
+from ngrok import LocalHostTunnel, ngrok
 from media import ConvertImageToDataString, GetImageFromFile
 from roblox import GenerateRobloxScript
 
@@ -20,8 +21,11 @@ def run_input() -> str:
 	print("Data is now hosted - run the (same) loader script again.")
 
 if __name__ == '__main__':
+	# create the localhost server and ngrok tunnel
 	webserver, ngrok_wrapper = default_setup()
+	# generate the roblox script to connect to the tunnel & localhost
 	GenerateRobloxScript( ngrok_wrapper.get_ngrok_addr() )
+	# allow the user to update active data on the localhost
 	while True:
 		try:
 			run_input()
@@ -30,5 +34,11 @@ if __name__ == '__main__':
 		except Exception as exception:
 			print("Error occurred: ")
 			print(exception)
-	ngrok_wrapper.close_tunnel()
+	# when exited
+	# close the ngrok tunnel
+	try:
+		ngrok.disconnect(ngrok_wrapper.get_ngrok_addr())
+	except:
+		pass
+	# close the localhost server
 	webserver.shutdown()

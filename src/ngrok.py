@@ -22,7 +22,7 @@ class LocalHostTunnel:
 	def close_tunnel(self):
 		if self.tunnel == None:
 			return
-		self.tunnel.kill()
+		self.tunnel.exit()
 		self.tunnel = None
 
 	def get_ngrok_addr(self) -> str:
