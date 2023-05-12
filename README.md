@@ -6,17 +6,9 @@
 
 2. Run the python code and enter the image filepath.
 
-3. Get result AUTO_PixelDataLoader.lua and upload to pastebin with the following format:
+3. You'll recieve some code to run in the script builder game
 
-	![](docs/SAMPLERAW.PNG)
-
-4. Run the pastebin code with "h/PASTEBIN_RAW_URL"
-
-	![](docs/SampleLoadPastebin.PNG)
-
-5. Run the BillboardPixels.lua / PartPixels.lua in script builder.
-
-	![](docs/SampleRunServer.PNG)
+4. Wallah
 
 ## Test Here
 You can test this system here;

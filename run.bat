@@ -1,3 +1,2 @@
-py src/main.py
-%SystemRoot%\explorer.exe "src"
+py src/__init__.py
 pause
