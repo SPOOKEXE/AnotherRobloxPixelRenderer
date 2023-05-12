@@ -6,8 +6,9 @@ from pydantic import FilePath
 
 FILE_DIRECTORY = os_path.dirname(os_path.abspath(__file__))
 
-#THUMB_SIZE = (300, 225)
-THUMB_SIZE = (256, 192)
+#THUMB_SIZE = (450, 337)
+THUMB_SIZE = (300, 225)
+#THUMB_SIZE = (256, 192)
 
 def ImageFileToPixelData( filepath : str ) -> tuple[tuple, list]:
 	shape, data = None, None
