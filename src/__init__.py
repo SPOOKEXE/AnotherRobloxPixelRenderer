@@ -4,6 +4,8 @@ from ngrok import LocalHostTunnel, ngrok
 from media import ConvertImageToDataString, GetImageFromFile
 from roblox import GenerateRobloxScript
 
+THUMBNAIL_SIZE = (900, 675)
+
 def default_setup(PORT = 5100):
 	webserver = SetupLocalHost(port=PORT)
 	ngrok_wrapper = LocalHostTunnel(port=PORT)
@@ -16,7 +18,7 @@ def run_input() -> str:
 	print("Input the filepath to the image: ")
 	filepath = input("")
 	image = GetImageFromFile( filepath )
-	data = ConvertImageToDataString( image )
+	data = ConvertImageToDataString( image, THUMB_SIZE=THUMBNAIL_SIZE )
 	SET_HOSTED_RAW_DATA(data)
 	print("Data is now hosted - run the (same) loader script again.")
 

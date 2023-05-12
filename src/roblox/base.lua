@@ -7,17 +7,23 @@ local function ReformatPythonArray( PythonArrayString )
 	return string.gsub(PythonArrayString, "'", '"')
 end
 
+print("pulling pixel data from host")
+
 local Data = HttpService:GetAsync(URL, true)
 Data = ReformatPythonArray(Data)
+
+print("got pixel data from host")
 
 local Shape, RawPixels = unpack(string.split(Data, "&"))
 print(Shape)
 Shape = HttpService:JSONDecode(Shape)
 RawPixels = HttpService:JSONDecode(RawPixels)
 
+print("loaded pixel data")
+
 -- // // --
 
-local SCALE = 1
+local SCALE = 0.1
 
 local Functions = { }
 
@@ -140,7 +146,7 @@ local ImageHeight = Shape[2]
 
 local renderer = PixelRender.New(RawPixels, ImageWidth, ImageHeight)
 
-print("Start Loading Pixels")
+print("Start Loading Pixels - ", #RawPixels)
 Functions.LoadAll(renderer)
 print("Loaded Pixels")
 
