@@ -1,4 +1,3 @@
-
 from localhost import SetupLocalHost, SET_HOSTED_RAW_DATA
 from ngrok import LocalHostTunnel
 from media import ConvertImageToDataString, GetImageFromFile
@@ -18,6 +17,7 @@ def run_input() -> str:
 	image = GetImageFromFile( filepath )
 	data = ConvertImageToDataString( image )
 	SET_HOSTED_RAW_DATA(data)
+	print("Data is now hosted - run the (same) loader script again.")
 
 if __name__ == '__main__':
 	webserver, ngrok_wrapper = default_setup()
@@ -25,7 +25,10 @@ if __name__ == '__main__':
 	while True:
 		try:
 			run_input()
+		except KeyboardInterrupt:
+			break
 		except Exception as exception:
+			print("Error occurred: ")
 			print(exception)
 	ngrok_wrapper.close_tunnel()
 	webserver.shutdown()
