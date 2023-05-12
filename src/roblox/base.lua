@@ -87,7 +87,7 @@ end
 function Functions.LoadAll(self)
 	local Counter = 0
 	while Functions.LoadNext(self) do
-		if Counter % 500 == 0 then
+		if Counter % 2000 == 0 then
 			Counter = 0
 			task.wait()
 		end
