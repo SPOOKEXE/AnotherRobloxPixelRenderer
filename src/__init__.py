@@ -7,8 +7,8 @@ from compression import v1 as CompressV1, v2 as CompressV2
 
 # DISPLAY RATIO: 16:9
 #THUMBNAIL_SIZE = (1280, 720) # 720p
-#THUMBNAIL_SIZE = (640, 480) # 480p
-THUMBNAIL_SIZE = (480, 360) # 360p
+THUMBNAIL_SIZE = (640, 480) # 480p
+#THUMBNAIL_SIZE = (480, 360) # 360p
 #THUMBNAIL_SIZE = (192, 144) # 144p
 
 def default_setup(PORT = 5100):

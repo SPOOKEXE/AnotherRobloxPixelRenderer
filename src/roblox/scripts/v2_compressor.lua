@@ -2,7 +2,7 @@ print("Deleting items under terrain")
 for _, Model in ipairs( workspace.Terrain:GetChildren() ) do
 	for i, Child in ipairs( Model:GetChildren() ) do
 		Child:Destroy()
-		if i%100 == 0 then
+		if i%50 == 0 then
 			task.wait()
 		end
 	end
@@ -71,7 +71,10 @@ print("Repacked Pallete - ", #Pallete)
 print("Unpacking Image - ", #PackedPixels)
 
 local Pixels = {}
-for _, Value in ipairs( PackedPixels ) do
+for i, Value in ipairs( PackedPixels ) do
+	if i%10000 == 0 then
+		task.wait()
+	end
 	if typeof(Value) == "number" then
 		table.insert(Pixels, Value)
 	else
@@ -90,9 +93,13 @@ print("Loading Image - ", #Pixels)
 
 index = 1
 local actualIndex = 0
-while index <= #Pixels do
+while index < #Pixels do
 	local Row = math.floor(actualIndex / Width)
 	local Column = (actualIndex % Width)
+
+	if index % 5000 == 0 then
+		task.wait()
+	end
 
 	if (index == 1) or (index % 1000 == 0) then
 		StorePixelsInThis = Instance.new('Model')
