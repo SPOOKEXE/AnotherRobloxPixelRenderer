@@ -1,12 +1,13 @@
 
-from src.localhost import SetupLocalHost, SET_HOSTED_RAW_DATA
-from src.ngrok import LocalHostTunnel, ngrok
-from src.media import GetImageFromFile
-from src.roblox import GenerateRobloxScript
-from src.compression import v1 as CompressV1, v2 as CompressV2
+from localhost import SetupLocalHost, SET_HOSTED_RAW_DATA
+from ngrok import LocalHostTunnel, ngrok
+from media import GetImageFromFile
+from roblox import GenerateRobloxScript
+from compression import v1 as CompressV1, v2 as CompressV2
 
 #THUMBNAIL_SIZE = (900, 675)
-THUMBNAIL_SIZE = (450, 337)
+#THUMBNAIL_SIZE = (450, 337)
+THUMBNAIL_SIZE = (225, 167)
 
 def default_setup(PORT = 5100):
 	webserver = SetupLocalHost(port=PORT)
@@ -28,7 +29,7 @@ if __name__ == '__main__':
 	# create the localhost server and ngrok tunnel
 	webserver, ngrok_wrapper = default_setup()
 	# generate the roblox script to connect to the tunnel & localhost
-	GenerateRobloxScript( ngrok_wrapper.get_ngrok_addr() )
+	GenerateRobloxScript( ngrok_wrapper.get_ngrok_addr(), compressor=1 )
 	# allow the user to update active data on the localhost
 	while True:
 		try:
@@ -38,11 +39,9 @@ if __name__ == '__main__':
 		except Exception as exception:
 			print("Error occurred: ")
 			print(exception)
-	# when exited
-	# close the ngrok tunnel
+	# when exited, close the ngrok tunnel and webserver
 	try:
 		ngrok.disconnect(ngrok_wrapper.get_ngrok_addr())
 	except:
 		pass
-	# close the localhost server
 	webserver.shutdown()

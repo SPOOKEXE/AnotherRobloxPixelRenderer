@@ -1,20 +1,12 @@
 
-local URL = "&&&&"
-
-local HttpService = game:GetService("HttpService")
-
-local function ReformatPythonArray( PythonArrayString )
-	return string.gsub(PythonArrayString, "'", '"')
+-- // PIXEL LOADER // --
+if not _G.PixelData then
+	error("You must pull the PixelData from the host using the 'pull_data.lua'")
 end
 
-print("pulling pixel data from host")
+local HttpService = game:GetService('HttpService')
 
-local Data = HttpService:GetAsync(URL, true)
-Data = ReformatPythonArray(Data)
-
-print("got pixel data from host")
-
-local Shape, RawPixels = unpack(string.split(Data, "&"))
+local Shape, RawPixels = unpack(string.split(_G.PixelData, "&"))
 print(Shape)
 Shape = HttpService:JSONDecode(Shape)
 RawPixels = HttpService:JSONDecode(RawPixels)
@@ -78,7 +70,7 @@ function Functions.LoadNext(self)
 		NewPixel.Position = Vector3.new(Column * SCALE, -Row * SCALE, 0)
 		NewPixel.Parent = PixelGroup
 
-		if index % 2500 == 0 then
+		if index % 3000 == 0 then
 			task.wait()
 		end
 	end
@@ -93,7 +85,7 @@ end
 function Functions.LoadAll(self)
 	local Counter = 0
 	while Functions.LoadNext(self) do
-		if Counter % 2000 == 0 then
+		if Counter % 750 == 0 then
 			Counter = 0
 			task.wait()
 		end
@@ -160,10 +152,21 @@ Att.WorldCFrame = GoalCFrame
 Att.Parent = workspace.Terrain
 
 print("Start Loading Pixels - ", #RawPixels)
-Functions.LoadAll(renderer)
+local s, e = pcall(Functions.LoadAll, renderer)
 print("Loaded Pixels")
 
-renderer.Model:PivotTo( GoalCFrame )
+if s then
+	local CurrentOriginCF = renderer.Model:GetPivot()
+	for i, Model in ipairs( renderer.Model:GetChildren() ) do
+		local ModelOriginOffset = Model:GetPivot():ToObjectSpace( CurrentOriginCF )
+		Model:PivotTo( GoalCFrame * ModelOriginOffset )
+		if i % 200 == 0 then
+			task.wait()
+		end
+	end
+else
+	warn(e)
+end
 
 task.delay(10, function()
 	Att:Destroy()

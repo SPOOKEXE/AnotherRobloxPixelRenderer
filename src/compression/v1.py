@@ -30,4 +30,8 @@ def _greedy_fill_extended( pixels ) -> str:
 	return str(new_pixels).replace(" ", "")
 
 def ConvertImageToDataString( img : Image.Image ) -> str:
-	return str( _greedy_fill_extended( list(img.getdata()) ) )
+	data = str( _greedy_fill_extended( list(img.getdata()) ) )
+	data = f"{str(list(img.size))}&{data}"
+	# with open('out.txt', 'w') as file:
+	# 	file.write(data)
+	return data

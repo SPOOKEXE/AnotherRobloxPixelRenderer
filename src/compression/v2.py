@@ -78,4 +78,4 @@ def ConvertImageToDataString( img : Image.Image, MIN_USAGE_COUNT=5 ) -> str:
 			string_array.extend(value)
 		else:
 			string_array.append(value)
-	return "[" + json_dumps(pixel_pallete).replace(" ", "") + "," + json_dumps(string_array).replace(" ", "") + "]"
+	return str(list(img.size)) + "&[" + json_dumps(pixel_pallete).replace(" ", "") + "," + json_dumps(string_array).replace(" ", "") + "]"

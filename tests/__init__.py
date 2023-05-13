@@ -9,6 +9,7 @@ from json import dumps as json_dumps
 FILE_DIRECTORY = os_path.dirname(os_path.realpath(__file__))
 
 sys_path.append( os_path.join(FILE_DIRECTORY, "..") )
+sys_path.append( os_path.join(FILE_DIRECTORY, "../src/") )
 
 from src.compression import v1 as CompressV1, v2 as CompressV2
 from src.media import GetImageFromFile
