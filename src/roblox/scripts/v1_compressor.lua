@@ -45,11 +45,11 @@ function Functions.LoadNext(self)
 		for _ = 1, repetitions do
 			table.insert(Pixels, {R, G, B})
 		end
-		self.CurrentIndex += 4
+		self.CurrentIndex = self.CurrentIndex + 4
 	else
 		local R, G, B = self.Pixels[self.CurrentIndex], self.Pixels[self.CurrentIndex+1], self.Pixels[self.CurrentIndex+2]
 		table.insert(Pixels, {R, G, B})
-		self.CurrentIndex += 3
+		self.CurrentIndex = self.CurrentIndex + 3
 	end
 
 	local pixelIndex = self.PixelNumber
@@ -89,7 +89,7 @@ function Functions.LoadAll(self)
 			Counter = 0
 			task.wait()
 		end
-		Counter += 1
+		Counter = Counter + 1
 	end
 end
 
@@ -152,20 +152,16 @@ Att.WorldCFrame = GoalCFrame
 Att.Parent = workspace.Terrain
 
 print("Start Loading Pixels - ", #RawPixels)
-local s, e = pcall(Functions.LoadAll, renderer)
+Functions.LoadAll(renderer)
 print("Loaded Pixels")
 
-if s then
-	local CurrentOriginCF = renderer.Model:GetPivot()
-	for i, Model in ipairs( renderer.Model:GetChildren() ) do
-		local ModelOriginOffset = Model:GetPivot():ToObjectSpace( CurrentOriginCF )
-		Model:PivotTo( GoalCFrame * ModelOriginOffset )
-		if i % 200 == 0 then
-			task.wait()
-		end
+local CurrentOriginCF = renderer.Model:GetPivot() * CFrame.new((-ImageWidth/2) * SCALE, 2, 0)
+for i, Model in ipairs( renderer.Model:GetChildren() ) do
+	local ModelOriginOffset = CurrentOriginCF:ToObjectSpace( Model:GetPivot() )
+	Model:PivotTo( GoalCFrame * ModelOriginOffset )
+	if i % 200 == 0 then
+		task.wait()
 	end
-else
-	warn(e)
 end
 
 task.delay(10, function()

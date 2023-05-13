@@ -5,9 +5,11 @@ from media import GetImageFromFile
 from roblox import GenerateRobloxScript
 from compression import v1 as CompressV1, v2 as CompressV2
 
-#THUMBNAIL_SIZE = (900, 675)
-#THUMBNAIL_SIZE = (450, 337)
-THUMBNAIL_SIZE = (225, 167)
+# DISPLAY RATIO: 16:9
+#THUMBNAIL_SIZE = (1280x720) # 720p
+THUMBNAIL_SIZE = (640, 480) # 480p
+#THUMBNAIL_SIZE = (480, 360) # 360p
+#THUMBNAIL_SIZE = (192, 144) # 144p
 
 def default_setup(PORT = 5100):
 	webserver = SetupLocalHost(port=PORT)

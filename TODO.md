@@ -1,5 +1,4 @@
 
-
 # TODO
 
 > v2_compressor.lua
@@ -11,4 +10,3 @@
 > v1_compressor.lua
 - rewrite; instead of saving a new decompressed array (duplicant values), create pixel blocks as you go
 - optimize
-

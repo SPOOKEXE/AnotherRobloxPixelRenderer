@@ -1,12 +1,9 @@
 
 from os import path as os_path, remove
-from subprocess import run as subprocess_run
 from tempfile import gettempdir
+from subprocess import run as subprocess_run
 
 FILE_DIRECTORY = os_path.dirname(os_path.realpath(__file__))
-
-LUA_EXE_FILE = os_path.join( "lua", "lua54.exe" )
-COMMAND_LUA_MINIFY = os_path.join( "LuaMinify", "CommandLineMinify.lua" )
 
 def minify_lua_source( source : str ) -> str:
 	# filepaths for the in and out files
@@ -15,15 +12,17 @@ def minify_lua_source( source : str ) -> str:
 	# write the source to the temporary file
 	with open(temp_filepath, "w") as file:
 		file.write(source)
-	# clear the output file
-	with open(out_filepath, "w") as file:
-		file.write("")
-	# TODO: MINIFY THE TEMPLATE FILE AND WRITE THE FILE TO THE OUT PATH
-	with open(out_filepath, "w") as file:
-		file.write(source)
+	subprocess_run([
+		os_path.join(FILE_DIRECTORY, 'lua51.exe'),
+		os_path.join(FILE_DIRECTORY, 'simpleSquishCl.lua'),
+		os_path.join(FILE_DIRECTORY, temp_filepath),
+		os_path.join(FILE_DIRECTORY, out_filepath),
+		'--minify-level=full'
+	])
 	# read the minified file
 	with open(out_filepath, "r") as file:
 		source = file.read()
+	source = source.replace("\n", " ")
 	# remove the temporary files
 	remove(temp_filepath)
 	remove(out_filepath)
@@ -43,4 +42,4 @@ def minify_lua_file( filepath : str ) -> str:
 	# return the minified code
 	return minified_code
 
-minify_lua_file( os_path.join(FILE_DIRECTORY, "..", "scripts", "v1_compressor.lua") )
+#minify_lua_file( os_path.join(FILE_DIRECTORY, "..", "scripts", "v1_compressor.lua") )
