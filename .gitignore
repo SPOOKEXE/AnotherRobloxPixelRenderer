@@ -43,3 +43,5 @@ AUTO_*.*
 loader.lua
 __pycache__
 *.json
+
+dump*.txt

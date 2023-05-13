@@ -72,7 +72,7 @@ def GreedyFillRepititionPallete( pixels ) -> tuple[list, list]:
 def round_pixels_to_nearest_fifth( pixels : list ) -> list:
 	new_pixels = []
 	for r,g,b in pixels:
-		new_pixels.append( [floor(r/15), floor(g/15), floor(b/15)] )
+		new_pixels.append( [floor(r/5), floor(g/5), floor(b/5)] )
 	return new_pixels
 
 def ConvertImageToDataString( img : Image.Image, MIN_USAGE_COUNT=5 ) -> str:

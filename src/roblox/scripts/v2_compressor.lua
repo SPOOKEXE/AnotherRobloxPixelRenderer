@@ -52,7 +52,7 @@ local StorePixelsInThis = false
 local function CreatePixelBlock( Index, R, G, B, CFrame )
 	local NewPixel = ReferencePart:Clone()
 	NewPixel.Name = Index
-	NewPixel.Color = Color3.fromRGB(R*15,G*15,B*15)
+	NewPixel.Color = Color3.fromRGB(R*5,G*5,B*5)
 	NewPixel.CFrame = CFrame
 	NewPixel.Parent = StorePixelsInThis
 end

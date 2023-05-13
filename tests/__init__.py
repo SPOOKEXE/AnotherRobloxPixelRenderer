@@ -31,11 +31,11 @@ def TestForFile( filepath : str ) -> tuple[int, int, list]:
 	global JSON_DUMP_DIRECTORY
 	FILE_DUMP_DIRECTORY = os_path.join( JSON_DUMP_DIRECTORY, filename )
 	
-	test_image = GetImageFromFile( filepath )
+	test_image = GetImageFromFile( filepath, THUMB_SIZE=(1280, 720) )
 	test_pixels = list(test_image.getdata())
 
 	# RAW
-	# 15,299,516
+	# 578,084
 	raw_size = len( str(test_pixels) )
 	print( "RAW: ", raw_size )
 	values = ["["]
@@ -46,17 +46,17 @@ def TestForFile( filepath : str ) -> tuple[int, int, list]:
 	values.append("]")
 	WriteCompressToFile( os_path.join(FILE_DUMP_DIRECTORY, "source.json"), values)
 
-	# GREEDY CURRECY
-	# 8,819,633
+	# GREEDY CURRENT
+	# 215,106
 	curr_compressed_image = CompressV1.ConvertImageToDataString( test_image.copy() )
 	curr_compressed_size = len(curr_compressed_image)
 	print( "CURR: ", curr_compressed_size )
 	WriteCompressToFile( os_path.join(FILE_DUMP_DIRECTORY, "current.json"), [curr_compressed_image] )
 
 	# NEW MULTI
-	# 7,558,327 (MIN_USAGE_COUNT = 5)
+	# 83,316 (MIN_USAGE_COUNT = 5)
 	size_results = []
-	for index, min_usage in enumerate([3, 5, 10, 15, 20, 30, 40]):
+	for index, min_usage in enumerate([3, 5, 10, 15, 20, 30, 40, 50, 75, 100, 150, 200, 250]):
 		new_compressed_image = CompressV2.ConvertImageToDataString( test_image.copy(), MIN_USAGE_COUNT=min_usage )
 		if index == 2:
 			with open( os_path.join(FILE_DIRECTORY, "dump.txt"), "w") as file:
@@ -79,7 +79,7 @@ def TestForFile( filepath : str ) -> tuple[int, int, list]:
 
 if __name__ == '__main__':
 	files = [
-		"C:\\Users\\Declan\\Music\\31tkCSZqN3L_2.png"
+		"C:\\Users\\Declan\\Music\\356280sample.jpg"
 	]
 
 	executor = futures.ThreadPoolExecutor(max_workers=8)
