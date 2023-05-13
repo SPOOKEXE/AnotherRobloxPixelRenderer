@@ -56,8 +56,11 @@ def TestForFile( filepath : str ) -> tuple[int, int, list]:
 	# NEW MULTI
 	# 7,558,327 (MIN_USAGE_COUNT = 5)
 	size_results = []
-	for min_usage in [3, 5, 10, 15, 20, 30, 40]:
+	for index, min_usage in enumerate([3, 5, 10, 15, 20, 30, 40]):
 		new_compressed_image = CompressV2.ConvertImageToDataString( test_image.copy(), MIN_USAGE_COUNT=min_usage )
+		if index == 2:
+			with open( os_path.join(FILE_DIRECTORY, "dump.txt"), "w") as file:
+				file.write(new_compressed_image)
 		new_compressed_size = len(new_compressed_image)
 		print( "NEW: ", new_compressed_size, " W/ USAGE ", min_usage )
 		pathtofile = os_path.join(FILE_DUMP_DIRECTORY, str(min_usage) + ".json")
@@ -76,9 +79,7 @@ def TestForFile( filepath : str ) -> tuple[int, int, list]:
 
 if __name__ == '__main__':
 	files = [
-		"C:\\Users\\Declan\\Music\\ioev0006g_9.png",
-		"C:\\Users\\Declan\\Music\\004_00_00-00_1A.png",
-		"C:\\Users\\Declan\\Music\\045_00_00-00_1A.png"
+		"C:\\Users\\Declan\\Music\\31tkCSZqN3L_2.png"
 	]
 
 	executor = futures.ThreadPoolExecutor(max_workers=8)
@@ -93,5 +94,5 @@ if __name__ == '__main__':
 		filepath, raw_size, current_comp_size, new_comp_size = promise.result()
 		results.append( [ filepath, raw_size, current_comp_size, new_comp_size ] )
 
-	with open("results.json", "w") as file:
+	with open( os_path.join(FILE_DIRECTORY, "results.json"), "w") as file:
 		file.write( json_dumps( results, indent=4 ) )

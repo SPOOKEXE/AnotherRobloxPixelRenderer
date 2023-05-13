@@ -1,13 +1,14 @@
 
+from math import floor
 from PIL import Image
 from json import dumps as json_dumps
 
-def GetFrequentColors( img : Image.Image, MIN_USAGE_COUNT=5 ) -> dict[str : int]:
+def GetFrequentColors( pixels, MIN_USAGE_COUNT=5 ) -> dict[str : int]:
 	# frequencies of "r-g-b" -> counter
 	temp_frequencies = { }
 	temp_pallete = { }
 	# pallete of "r-g-b" -> [ r,g,b ]
-	for r,g,b in list(img.getdata()):
+	for r,g,b in pixels:
 		idx = f"{r},{g},{b}"
 		if temp_frequencies.get(idx):
 			temp_frequencies[idx] += 1
@@ -24,17 +25,17 @@ def GetFrequentColors( img : Image.Image, MIN_USAGE_COUNT=5 ) -> dict[str : int]
 	# return the frequency stuff
 	return frequencies, pallete
 
-def GetRepititionPalleteFill( img : Image.Image, MIN_USAGE_COUNT=5 ) -> tuple[list, list]:
-	frequencies, pallete = GetFrequentColors( img, MIN_USAGE_COUNT=MIN_USAGE_COUNT )
+def GetRepititionPalleteFill( pixels : Image.Image, MIN_USAGE_COUNT=5 ) -> tuple[list, list]:
+	frequencies, pallete = GetFrequentColors( pixels, MIN_USAGE_COUNT=MIN_USAGE_COUNT )
 	pallete_to_index = { }
 	pixel_pallete = []
 	pixel_array = []
-	for r,g,b in list(img.getdata()):
+	for r,g,b in pixels:
 		idx = f"{r},{g},{b}"
 		if frequencies.get(idx):
 			if not pallete_to_index.get( idx ):
-				pixel_pallete.extend( pallete[idx] )
-				pallete_to_index[ idx ] = len(pixel_pallete)-1
+				pixel_pallete.append( pallete[idx] )
+				pallete_to_index[ idx ] = len(pixel_pallete)
 			pixel_array.append(f"x{pallete_to_index[idx]}")
 		else:
 			pixel_array.extend([r,g,b])
@@ -58,7 +59,7 @@ def _greedy_fill_extended( pixels ) -> str:
 	while index < len(pixels):
 		count, value = _greedy_fill( pixels, index )
 		if count > 2:
-			new_pixels.append(str(count) + 'y' + str(value))
+			new_pixels.append( str(count) + 'y' + str(value))
 			index += count
 		else:
 			new_pixels.append(value)
@@ -68,14 +69,20 @@ def _greedy_fill_extended( pixels ) -> str:
 def GreedyFillRepititionPallete( pixels ) -> tuple[list, list]:
 	return _greedy_fill_extended( pixels )
 
+def round_pixels_to_nearest_fifth( pixels : list ) -> list:
+	new_pixels = []
+	for r,g,b in pixels:
+		new_pixels.append( [floor(r/15), floor(g/15), floor(b/15)] )
+	return new_pixels
+
 def ConvertImageToDataString( img : Image.Image, MIN_USAGE_COUNT=5 ) -> str:
-	# COMPRESS HERE
-	pixel_array, pixel_pallete = GetRepititionPalleteFill( img, MIN_USAGE_COUNT=MIN_USAGE_COUNT )
+	pixels = round_pixels_to_nearest_fifth( list(img.getdata()) )
+	pixel_array, pixel_pallete = GetRepititionPalleteFill( pixels, MIN_USAGE_COUNT=MIN_USAGE_COUNT )
 	pixel_array = GreedyFillRepititionPallete( pixel_array )
-	string_array = []
-	for value in pixel_array:
+	compressed_pallete = []
+	for value in pixel_pallete:
 		if type(value) == list:
-			string_array.extend(value)
+			compressed_pallete.extend(value)
 		else:
-			string_array.append(value)
-	return str(list(img.size)) + "&[" + json_dumps(pixel_pallete).replace(" ", "") + "," + json_dumps(string_array).replace(" ", "") + "]"
+			compressed_pallete.append(value)
+	return str(list(img.size)) + "&[" + json_dumps(compressed_pallete).replace(" ", "") + "," + json_dumps(pixel_array).replace(" ", "") + "]"

@@ -6,9 +6,9 @@ from roblox import GenerateRobloxScript
 from compression import v1 as CompressV1, v2 as CompressV2
 
 # DISPLAY RATIO: 16:9
-#THUMBNAIL_SIZE = (1280x720) # 720p
-THUMBNAIL_SIZE = (640, 480) # 480p
-#THUMBNAIL_SIZE = (480, 360) # 360p
+#THUMBNAIL_SIZE = (1280, 720) # 720p
+#THUMBNAIL_SIZE = (640, 480) # 480p
+THUMBNAIL_SIZE = (480, 360) # 360p
 #THUMBNAIL_SIZE = (192, 144) # 144p
 
 def default_setup(PORT = 5100):
@@ -23,7 +23,7 @@ def run_input() -> str:
 	print("Input the filepath to the image: ")
 	filepath = input("")
 	image = GetImageFromFile( filepath, THUMB_SIZE=THUMBNAIL_SIZE )
-	data = CompressV1.ConvertImageToDataString( image )
+	data = CompressV2.ConvertImageToDataString( image )
 	SET_HOSTED_RAW_DATA(data)
 	print("Data is now hosted - run the (same) loader script again.")
 
@@ -31,7 +31,7 @@ if __name__ == '__main__':
 	# create the localhost server and ngrok tunnel
 	webserver, ngrok_wrapper = default_setup()
 	# generate the roblox script to connect to the tunnel & localhost
-	GenerateRobloxScript( ngrok_wrapper.get_ngrok_addr(), compressor=1 )
+	GenerateRobloxScript( ngrok_wrapper.get_ngrok_addr(), 2 )
 	# allow the user to update active data on the localhost
 	while True:
 		try:

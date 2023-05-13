@@ -14,7 +14,7 @@ def GetScriptFileSource( filename : str ) -> str:
 		data = file.read()
 	return data
 
-def GenerateRobloxScript( ngrok_url : str, compressor=1 ) -> str:
+def GenerateRobloxScript( ngrok_url : str, compressor : int ) -> str:
 	raw_code = ""
 	with open( os_path.join(FILE_DIRECTORY, "base.lua"), "r" ) as file:
 		raw_code = file.read()

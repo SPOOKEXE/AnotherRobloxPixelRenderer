@@ -1,4 +1,5 @@
 
+from math import floor
 from PIL import Image
 
 def _greedy_fill( pixels, startIndex ) -> tuple[int, list]:
@@ -22,15 +23,23 @@ def _greedy_fill_extended( pixels ) -> str:
 		fill_color = fill_color[:3]
 		if count > 2:
 			new_pixels.append('x'+str(count))
-			new_pixels.extend(fill_color[:3])
+			new_pixels.extend(fill_color)
 			index += count
 		else:
-			new_pixels.extend(fill_color[:3])
+			new_pixels.extend(fill_color)
 			index += 1
 	return str(new_pixels).replace(" ", "")
 
+def round_pixels_to_nearest_fifth( pixels : list ) -> list:
+	new_pixels = []
+	for r,g,b in pixels:
+		new_pixels.append( [floor(r/5) * 5, floor(g/5) * 5, floor(b/5) * 5] )
+	return new_pixels
+
 def ConvertImageToDataString( img : Image.Image ) -> str:
-	data = str( _greedy_fill_extended( list(img.getdata()) ) )
+	pixels = list(img.getdata())
+	rounded_pixels = round_pixels_to_nearest_fifth( pixels )
+	data = str( _greedy_fill_extended(rounded_pixels) )
 	data = f"{str(list(img.size))}&{data}"
 	# with open('out.txt', 'w') as file:
 	# 	file.write(data)

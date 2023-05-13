@@ -70,7 +70,8 @@ function Functions.LoadNext(self)
 		NewPixel.Position = Vector3.new(Column * SCALE, -Row * SCALE, 0)
 		NewPixel.Parent = PixelGroup
 
-		if index % 3000 == 0 then
+		-- in the event there is a x1000 dupe
+		if index % 1000 == 0 then
 			task.wait()
 		end
 	end
@@ -85,7 +86,7 @@ end
 function Functions.LoadAll(self)
 	local Counter = 0
 	while Functions.LoadNext(self) do
-		if Counter % 750 == 0 then
+		if Counter % 1000 == 0 then
 			Counter = 0
 			task.wait()
 		end
@@ -99,7 +100,12 @@ function Functions.Delete(self)
 		self.ReferencePart = nil
 	end
 	if self.Model then
-		self.Model:ClearAllChildren()
+		for index, PixelModel in ipairs( self.Model:GetChildren() ) do
+			PixelModel:Destroy()
+			if index % 3000 == 0 then
+				task.wait()
+			end
+		end
 		self.Model:Destroy()
 		self.Model = nil
 	end
@@ -164,7 +170,7 @@ for i, Model in ipairs( renderer.Model:GetChildren() ) do
 	end
 end
 
-task.delay(10, function()
+task.delay(5, function()
 	Att:Destroy()
 	Functions.Delete(renderer)
 end)
