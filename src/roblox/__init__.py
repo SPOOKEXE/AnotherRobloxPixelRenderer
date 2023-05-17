@@ -14,13 +14,13 @@ def GetScriptFileSource( filename : str ) -> str:
 		data = file.read()
 	return data
 
-def GenerateRobloxScript( ngrok_url : str, compressor : int ) -> str:
+def GenerateRobloxScript( ngrok_url : str, loader_filename="v2_compressor.lua" ) -> str:
 	raw_code = ""
 	with open( os_path.join(FILE_DIRECTORY, "base.lua"), "r" ) as file:
 		raw_code = file.read()
 
 	ngrok_code = minify_lua_source( raw_code.replace("&&&&", ngrok_url) )
-	compressor_source = minify_lua_source( GetScriptFileSource(f"v{compressor}_compressor.lua") )
+	compressor_source = minify_lua_source( GetScriptFileSource(loader_filename) )
 
 	new_code = ngrok_code + ("\n"*3) + compressor_source
 

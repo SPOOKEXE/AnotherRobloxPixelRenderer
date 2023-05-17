@@ -3,7 +3,7 @@ from localhost import SetupLocalHost, SET_HOSTED_RAW_DATA
 from ngrok import LocalHostTunnel, ngrok
 from media import GetImageFromFile
 from roblox import GenerateRobloxScript
-from compression import v1 as CompressV1, v2 as CompressV2
+from src.compression import ConvertImageToRawForRoblox
 
 # DISPLAY RATIO: 16:9
 #THUMBNAIL_SIZE = (1280, 720) # 720p
@@ -23,7 +23,7 @@ def run_input() -> str:
 	print("Input the filepath to the image: ")
 	filepath = input("")
 	image = GetImageFromFile( filepath, THUMB_SIZE=THUMBNAIL_SIZE )
-	data = CompressV2.ConvertImageToDataString( image )
+	data = ConvertImageToRawForRoblox( image )
 	SET_HOSTED_RAW_DATA(data)
 	print("Data is now hosted - run the (same) loader script again.")
 
@@ -31,7 +31,7 @@ if __name__ == '__main__':
 	# create the localhost server and ngrok tunnel
 	webserver, ngrok_wrapper = default_setup()
 	# generate the roblox script to connect to the tunnel & localhost
-	GenerateRobloxScript( ngrok_wrapper.get_ngrok_addr(), 2 )
+	GenerateRobloxScript( ngrok_wrapper.get_ngrok_addr() )
 	# allow the user to update active data on the localhost
 	while True:
 		try:
