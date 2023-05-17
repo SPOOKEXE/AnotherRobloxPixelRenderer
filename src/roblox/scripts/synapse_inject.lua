@@ -1,2 +1,0 @@
--- TODO:
--- a version which reads from the webserver and directly sets the global variable

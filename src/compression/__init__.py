@@ -8,6 +8,6 @@ def CompressString( source : str, level=9 ) -> str:
 
 def ConvertImageToRawForRoblox( img : Image.Image, MIN_USAGE_COUNT=5, zlib=True ) -> str:
 	source = V2Compression(img, MIN_USAGE_COUNT=MIN_USAGE_COUNT)
-	if zlib:
-		source = CompressString(source)
+	# if zlib:
+	# 	source = CompressString(source)
 	return source

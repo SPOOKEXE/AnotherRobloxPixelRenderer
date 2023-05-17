@@ -32,7 +32,7 @@ def TestForFile( filepath : str ) -> tuple[int, int, list]:
 	global JSON_DUMP_DIRECTORY
 	FILE_DUMP_DIRECTORY = os_path.join( JSON_DUMP_DIRECTORY, filename )
 	
-	test_image = GetImageFromFile( filepath, THUMB_SIZE=(1280, 720) )
+	test_image = GetImageFromFile( filepath, THUMB_SIZE=(1024, 768) )
 	test_pixels = list(test_image.getdata())
 
 	# RAW
@@ -53,9 +53,9 @@ def TestForFile( filepath : str ) -> tuple[int, int, list]:
 
 	# COMPRESSION (greedy pixel + zlib)
 	size_results = []
-	for index, min_usage in enumerate([3, 5, 10, 15, 20, 30, 40, 50, 75, 100, 150, 200, 250]):
+	for index, min_usage in enumerate([100]):#, 20, 50, 150]):#, 10, 15, 20, 30, 40, 50, 75, 100, 150, 200, 250]):
 		new_compressed_image = ConvertImageToRawForRoblox( test_image.copy(), MIN_USAGE_COUNT=min_usage )
-		if index == 2:
+		if index == 0:
 			with open( os_path.join(FILE_DIRECTORY, "dump_size5.txt"), "w") as file:
 				file.write(new_compressed_image)
 		new_compressed_size = len(new_compressed_image)
@@ -68,7 +68,7 @@ def TestForFile( filepath : str ) -> tuple[int, int, list]:
 
 if __name__ == '__main__':
 	files = [
-		"C:\\Users\\Declan\\Music\\database_go_brrr.PNG"
+		"E:\GitHub\AnotherRobloxPixelRenderer\\tests\\wallpaperflare.com_wallpaper.jpg"
 	]
 
 	executor = futures.ThreadPoolExecutor(max_workers=8)
