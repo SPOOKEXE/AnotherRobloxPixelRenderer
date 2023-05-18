@@ -1,4 +1,4 @@
-DO_DUMP_TO_FILE = False
+DO_DUMP_TO_FILE = True
 
 from os import path as os_path, makedirs
 from sys import path as sys_path
@@ -32,7 +32,8 @@ def TestForFile( filepath : str ) -> tuple[int, int, list]:
 	global JSON_DUMP_DIRECTORY
 	FILE_DUMP_DIRECTORY = os_path.join( JSON_DUMP_DIRECTORY, filename )
 	
-	test_image = GetImageFromFile( filepath, THUMB_SIZE=(1024, 768) )
+	test_image = GetImageFromFile( filepath, THUMB_SIZE=(480, 360) )
+	print(test_image.size)
 	test_pixels = list(test_image.getdata())
 
 	# RAW
@@ -49,7 +50,7 @@ def TestForFile( filepath : str ) -> tuple[int, int, list]:
 	with open( os_path.join(FILE_DIRECTORY, "raw_zlib.txt"), "w") as file:
 		file.write(zlib_compress( str(test_pixels).encode(), level=9).hex()) 
 
-	#WriteCompressToFile( os_path.join(FILE_DUMP_DIRECTORY, "source.json"), values)
+	WriteCompressToFile( os_path.join(FILE_DUMP_DIRECTORY, "source.json"), values)
 
 	# COMPRESSION (greedy pixel + zlib)
 	size_results = []
