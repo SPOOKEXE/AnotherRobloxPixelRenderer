@@ -3,7 +3,7 @@ from localhost import SetupLocalHost, SET_HOSTED_RAW_DATA
 from ngrok import LocalHostTunnel, ngrok
 from media import GetImageFromFile
 from roblox import GenerateRobloxScript
-from src.compression import ConvertImageToRawForRoblox
+from compression import ConvertImageToRawForRoblox
 
 # DISPLAY RATIO: 16:9
 #THUMBNAIL_SIZE = (1280, 720) # 720p
