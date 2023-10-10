@@ -44,6 +44,7 @@ loader.lua
 __pycache__
 *.json
 
-dump*.txt
+!lua54.exe
+!lua54.dll
 
 /temp/
